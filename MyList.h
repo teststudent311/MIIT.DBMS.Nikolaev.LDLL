@@ -1,6 +1,6 @@
 /*****************************************************************//**
  * \file   MyList.h
- * \brief  API класса линейный двухсвязный список
+ * \brief  API РєР»Р°СЃСЃР° Р»РёРЅРµР№РЅС‹Р№ РґРІСѓС…СЃРІСЏР·РЅС‹Р№ СЃРїРёСЃРѕРє
  *
  * \author Nikolaev A. (teststudent311)
  * \date   October 2022
@@ -9,75 +9,75 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
 struct Elem
 {
-    int data; // данные
-    Elem* next, * prev; // указатели на начало и конец списка
+    int data; // РґР°РЅРЅС‹Рµ
+    Elem* next, * prev; // СѓРєР°Р·Р°С‚РµР»Рё РЅР° РЅР°С‡Р°Р»Рѕ Рё РєРѕРЅРµС† СЃРїРёСЃРєР°
+    Elem(const int data_) noexcept; // РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂРѕРј
 };
 
 class List
 {
-    // Указатели на начало и конец списка
+    // РЈРєР°Р·Р°С‚РµР»Рё РЅР° РЅР°С‡Р°Р»Рѕ Рё РєРѕРЅРµС† СЃРїРёСЃРєР°
     Elem* Head, * Tail;
-    // Количество элементов списка
+    // РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ СЃРїРёСЃРєР°
     int count;
 
 public:
 
-    // Конструктор
-    List();
+    // РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    List() noexcept;
 
-    // Деструктор
-    ~List();
+    // Р”РµСЃС‚СЂСѓРєС‚РѕСЂ
+    ~List() noexcept;
 
-    // Получить количество элементов
-    int getCount();
+    // РџРѕР»СѓС‡РёС‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ
+    int GetCount() const noexcept;
 
-    // Получить элемент списка
-    Elem* getElem(const size_t index);
+    // РџРѕР»СѓС‡РёС‚СЊ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°
+    Elem* getElem(const int value) const;
 
-    // Удалить весь список
-    void gelAll();
+    // РЈРґР°Р»РёС‚СЊ РІРµСЃСЊ СЃРїРёСЃРѕРє
+    void Clear() noexcept;
 
-    // Удаление элемента
-    void del(const size_t index = 0);
+    // РЈРґР°Р»РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°
+    void Remove(const int value) noexcept;
 
-    // Вставка элемента
-    void insert(const size_t index = 0);
+    // Р’СЃС‚Р°РІРєР° СЌР»РµРјРµРЅС‚Р°
+    void Insert(const int value) noexcept;
 
-    // Добавление в конец списка
-    void addTail(int value);
+    // Р”РѕР±Р°РІР»РµРЅРёРµ РІ РєРѕРЅРµС† СЃРїРёСЃРєР°
+    void AddTail(int value) noexcept;
 
-    // Добавление в начало списка
-    void addHead(int value);
+    // Р”РѕР±Р°РІР»РµРЅРёРµ РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР°
+    void AddHead(int value) noexcept;
 
-    // Печать списка
-    void printAll();
+    // РџРµС‡Р°С‚СЊ СЃРїРёСЃРєР°
+    string PrintAll() const noexcept;
 
-    // Печать определенного элемента списка
-    void print(const size_t index);
 
 
     /**
-    * \brief Копирующий конструктор.
+    * \brief РљРѕРїРёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ.
     */
     List(const List& other) = delete;
 
     /**
-    * \brief Перемещающий конструктор.
+    * \brief РџРµСЂРµРјРµС‰Р°СЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ.
     */
     List(List&& other) = delete;
 
     /**
-    * \brief Оператор перемещения
+    * \brief РћРїРµСЂР°С‚РѕСЂ РїРµСЂРµРјРµС‰РµРЅРёСЏ
     */
     List&& operator = (List& other) = delete;
 
     /**
-    * \brief Оператор копирования
+    * \brief РћРїРµСЂР°С‚РѕСЂ РєРѕРїРёСЂРѕРІР°РЅРёСЏ
     */
     List& operator = (const List& other) = delete;
 };

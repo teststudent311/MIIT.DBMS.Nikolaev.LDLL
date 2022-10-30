@@ -13,50 +13,96 @@
 
 using namespace std;
 
-struct Elem
+/**
+ * \brief Структура состоящая из 3 эелементов:
+ *        data - значение элемента списка
+ *        Element* next - указатели на начало списка
+ *        Element* prev - указатели на конец списка
+ */
+struct Element
 {
-    int data; // данные
-    Elem* next, * prev; // указатели на начало и конец списка
-    Elem(const int data_) noexcept; // конструктор с параметром
+    int data; 
+    Element* next;
+    Element* prev;
+
+    /**
+     * \brief Конструктор для создания элемента списка 
+     */
+    Element(const int data_) noexcept;
 };
 
 class List
 {
     // Указатели на начало и конец списка
-    Elem* Head, * Tail;
+    Element* Head;
+    Element* Tail;
     // Количество элементов списка
     int count;
 
 public:
 
-    // Конструктор
+    /**
+    * \brief Конструктор класса
+    */
     List() noexcept;
 
-    // Деструктор
+    /**
+     * \brief Деструктор класса
+     */
     ~List() noexcept;
 
-    // Получить количество элементов
+    /**
+     * \brief Функция для подсчета элементов списка
+     * \return int - количество элементов списка 
+     */
     int GetCount() const noexcept;
 
-    // Получить элемент списка
-    Elem* getElem(const int value) const;
+    /**
+     * \brief Проверяет есть такой элемент в списке
+     * \param value - значение элемента
+     * \return true - если есть такой элемент, иначе - false
+     */
+    bool Contains(const int value) const noexcept;
 
-    // Удалить весь список
-    void Clear() noexcept;
+    /**
+     * \brief Функция очистки списка
+     */
+    void Clear();
 
-    // Удаление элемента
-    void Remove(const int value) noexcept;
+    /**
+     * \brief Функция для удаления элемента списка по индексу
+     * \param pos - индекс элемента
+     */
+    void Del(const size_t pos);
 
-    // Вставка элемента
-    void Insert(const int value) noexcept;
+    /**
+     * \brief Функция для удаления элемент списка по значению
+     * \param value - значение элемента
+     */
+    void Remove(const int value);
 
-    // Добавление в конец списка
-    void AddTail(int value) noexcept;
+    /**
+     * \brief Функция встраивания элемента
+     * \param value - значение элемента
+     */
+    void Insert(const int value, const size_t pos);
 
-    // Добавление в начало списка
-    void AddHead(int value) noexcept;
+    /**
+     * \brief Функция добавления элемента в конец списка
+     * \param value - значение элемента
+     */
+    void AddTail(const int value) noexcept;
 
-    // Печать списка
+    /**
+     * \brief Функция добавления элемента в начало списка
+     * \param value - значение элемента
+     */
+    void AddHead(const int value) noexcept;
+
+    /**
+     * \brief Функция сохранения в строку списка
+     * \return строка содержащая список
+     */
     string PrintAll() const noexcept;
 
 

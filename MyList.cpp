@@ -7,11 +7,8 @@
  *********************************************************************/
 #include "MyList.h"
 
-List::List()
-{
-    this->Head = this->Tail = NULL;
-    this->count = 0;
-}
+List::List(): head(nullptr), tail(nullptr), count(0)
+{}
 
 
 List::~List()
@@ -23,16 +20,19 @@ void List::AddHead(const int value) noexcept
 {
     Element* temp = new Element(value);
 
-    temp->prev = 0;
-    temp->next = this->Head;
+    temp->prev = nullptr;
+    temp->next = this->head;
 
-    if (this->Head != 0)
-        this->Head->prev = temp;
+    if (this->head != nullptr)
+        this->head->prev = temp;
 
     if (this->count == 0)
-        this->Head = this->Tail = temp;
+    {
+        this->tail = temp;
+        this->head = temp;
+    }
     else
-        this->Head = temp;
+        this->head = temp;
 
     this->count++;
 }
@@ -40,24 +40,27 @@ void List::AddHead(const int value) noexcept
 void List::AddTail(const int value) noexcept
 {
     Element* temp = new Element(value);
-    temp->next = 0;
-    temp->prev = this->Tail;
+    temp->next = nullptr;
+    temp->prev = this->tail;
 
-    if (this->Tail != 0)
-        this->Tail->next = temp;
+    if (this->tail != nullptr)
+        this->tail->next = temp;
 
     // Если элемент первый, то он одновременно и голова, и хвост списка
     if (this->count == 0)
-        this->Head = this->Tail = temp;
+    {
+        this->tail = temp;
+        this->head = temp;
+    }
     else
-        this->Tail = temp;
+        this->tail = temp;
 
     this->count++;
 }
 
 void List::Insert(const int value, const size_t pos)
 {   
-    if (pos < 1 || pos > this->count + 1)
+    if (pos > this->count + 1)
     {
         throw out_of_range("Bad position!");
     }
@@ -73,33 +76,28 @@ void List::Insert(const int value, const size_t pos)
         return;
     }
 
-    int i = 1;
+    size_t i = 1;
 
     // Отсчитываем от головы n - 1 элементов
-    Element* Ins = this->Head;
+    Element* ins = this->head;
 
     while (i < pos)
     {
-        Ins = Ins->next;
+        ins = ins->next;
         i++;
     }
 
-    Element* PrevIns = Ins->prev;
+    Element* prevIns = ins->prev;
     Element* temp = new Element(value);
 
-    if (PrevIns != 0 && this->count != 1)
-        PrevIns->next = temp;
+    if (prevIns != nullptr && this->count != 1)
+        prevIns->next = temp;
 
-    temp->next = Ins;
-    temp->prev = PrevIns;
-    Ins->prev = temp;
+    temp->next = ins;
+    temp->prev = prevIns;
+    ins->prev = temp;
 
     this->count++;
-}
-
-void List::Remove(const int value)
-{
-    return;
 }
 
 
@@ -109,8 +107,8 @@ string List::PrintAll() const noexcept
     // Если в списке есть элементы, то печатаем с головного элемента списка
     if (this->count != 0)
     {
-        Element* temp = this->Head;
-        while (temp->next != 0)
+        Element* temp = this->head;
+        while (temp->next != nullptr)
         {
             tmpStream << temp->data << ", ";
             temp = temp->next;
@@ -120,40 +118,67 @@ string List::PrintAll() const noexcept
     }
 }
 
-void List::Del(const size_t pos)
+void List::Remove(const int value)
 {
-    if (pos < 1 || pos > this->count + 1)
+    if (Contains(value) == false)
+    {
+        throw out_of_range("Out of range!");
+    }
+
+    Element* tmp = this->head;
+    int index = -1;
+
+    for (size_t i = 0; i < count - 1; i++)
+    {
+        if (tmp->data == value)
+            index = i;
+        
+    }
+
+    if (index <= -1)
+    {
+        throw out_of_range("Didn`t find values!");
+    }
+
+    static_cast<size_t>(index);
+    Delete(index);
+    
+}
+
+void List::Delete(const size_t pos)
+{
+    if (pos > this->count + 1)
     {
         throw out_of_range("Bad position!");
     }
 
-    int i = 1;
+    size_t i = 1;
 
-    Element* Del = this->Head;
+    Element* del = this->head;
 
     while (i < pos)
     {
-        Del = Del->next;
+       del =del->next;
         i++;
     }
 
-    Element* PrevDel = Del->prev;
-    Element* AfterDel = Del->next;
+    Element* prevDel =del->prev;
+    Element* afterDel =del->next;
 
     // Если удаляем не голову списка
-    if (PrevDel != 0 && this->count != 1)
-        PrevDel->next = AfterDel;
+    if (prevDel != nullptr && this->count != 1)
+        prevDel->next = afterDel;
     // Если удаляем не хвост списка
-    if (AfterDel != 0 && this->count != 1)
-        AfterDel->prev = PrevDel;
+    if (afterDel != nullptr && this->count != 1)
+        afterDel->prev = prevDel;
 
     // Удаляются крайние элементы
     if (pos == 1)
-        this->Head = AfterDel;
+        this->head = afterDel;
     if (pos == this->count)
-        this->Tail = PrevDel;
+        this->tail = prevDel;
 
-    delete Del;
+    delete del;
 
     this->count--;
 }
@@ -161,15 +186,25 @@ void List::Del(const size_t pos)
 void List::Clear() noexcept
 {
     while (this->count != 0)
-        Del(1);
+        Delete(1);
 }
 
-int List::GetCount() const noexcept
+size_t List::GetCount() const noexcept
 {
     return this->count;
 }
 
 bool List::Contains(const int value) const noexcept
 {
-    return;
+    Element* tmp = this->head;
+
+    for (size_t i = 0; i < count-1; i++)
+    {
+        if (tmp->data == value)
+            return true;
+        tmp = tmp->next;
+
+    }
+
+    return false;
 }

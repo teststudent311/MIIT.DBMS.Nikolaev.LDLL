@@ -7,9 +7,8 @@
  *********************************************************************/
 #include "MyList.h"
 
-List::List(): head(nullptr), tail(nullptr), count(0)
+List::List() noexcept : head(nullptr), tail(nullptr), count(0)
 {}
-
 
 List::~List()
 {
@@ -208,3 +207,4 @@ bool List::Contains(const int value) const noexcept
 
     return false;
 }
+

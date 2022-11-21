@@ -51,7 +51,7 @@ public:
     /**
      * \brief Функция очистки списка
      */
-    void Clear();
+    void Clear() noexcept;
 
     /**
      * \brief Функция для удаления элемента списка по индексу

@@ -8,11 +8,8 @@
 
 #include "Element.h"  
 
-Element::Element(const int data_) noexcept
+Element::Element(const int data_) noexcept : data(data_), next(nullptr), prev(nullptr)
 {
-	this->data = data_;
-	this->next = nullptr;
-	this->prev = nullptr;
 }
 
 Element::~Element() noexcept
@@ -20,4 +17,9 @@ Element::~Element() noexcept
 	this->data = 0;
 	this->next = nullptr;
 	this->prev = nullptr;
+}
+
+int Element::GetData() const noexcept
+{
+	return this->data;
 }

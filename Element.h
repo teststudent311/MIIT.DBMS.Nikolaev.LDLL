@@ -30,6 +30,11 @@ public:
      * \brief Деструктор класса
       */
     ~Element() noexcept;
+    
+    /**
+     * \brief вывод хранящегося значения
+     */
+    int GetData() const noexcept;
 };
 
 

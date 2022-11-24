@@ -10,7 +10,7 @@ namespace ElementTests
 	{
 	public:
 		
-		TEST_METHOD(CONSTRUCTOR_Test)
+		TEST_METHOD(Ctor_Test)
 		{
 			// Arrange
 			const int my_value = 10000;
@@ -19,7 +19,6 @@ namespace ElementTests
 			Element my_element(my_value);
 
 			// Assert
-
 			Assert::AreEqual(my_element.GetData(), my_value);
 		}
 	};

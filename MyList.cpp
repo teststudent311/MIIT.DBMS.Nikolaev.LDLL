@@ -69,7 +69,7 @@ void List::Insert(const int value, const size_t pos)
         AddTail(value);
         return;
     }
-    else if (pos == 1)
+    else if (pos == 0)
     {
         AddHead(value);
         return;
@@ -107,7 +107,7 @@ string List::PrintAll() const noexcept
     if (this->count != 0)
     {
         Element* temp = this->head;
-        while (temp->next != nullptr)
+        for (size_t index = 0; index < count; index++)
         {
             tmpStream << temp->data << ", ";
             temp = temp->next;
@@ -146,7 +146,7 @@ void List::Remove(const int value)
 
 void List::Delete(const size_t pos)
 {
-    if (pos > this->count + 1)
+    if (pos > this->count)
     {
         throw out_of_range("Bad position!");
     }
@@ -182,6 +182,7 @@ void List::Delete(const size_t pos)
     this->count--;
 }
 
+
 void List::Clear() noexcept
 {
     while (this->count != 0)
@@ -197,7 +198,7 @@ bool List::Contains(const int value) const noexcept
 {
     Element* tmp = this->head;
 
-    for (size_t i = 0; i < count-1; i++)
+    for (size_t i = 0; i < count; i++)
     {
         if (tmp->data == value)
             return true;
@@ -206,5 +207,52 @@ bool List::Contains(const int value) const noexcept
     }
 
     return false;
+}
+
+List::List(const List& other) noexcept
+{
+    this->head = other.head;
+    this->tail = other.tail;
+}
+
+List::List(List&& other) noexcept
+{
+    this->head = other.head;
+    this->tail = other.tail;
+
+    other.head = nullptr;
+    other.tail = nullptr;
+}
+
+List& List::operator = (List&& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    this->~List();
+
+    this->head = other.head;
+    this->tail = other.tail;
+
+    other.head = nullptr;
+    other.tail = nullptr;
+
+    return *this;
+}
+
+List& List::operator = (const List& other) noexcept
+{
+    if (this == &other)
+        return *this;
+
+    Element* temp = other.head;
+
+    while (temp != 0)
+    {
+        AddTail(temp->data);
+        temp = temp->next;
+    }
+
+    return *this;
 }
 

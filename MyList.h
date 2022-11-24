@@ -17,13 +17,13 @@ using namespace std;
 
 class List
 {
-    // Указатели на начало и конец списка
-    Element* head;
-    Element* tail;
-    // Количество элементов списка
-    size_t count;
+ public:
 
-public:
+     // Указатели на начало и конец списка
+     Element* head;
+     Element* tail;
+     // Количество элементов списка
+     size_t count;
 
     /**
     * \brief Конструктор класса
@@ -92,20 +92,20 @@ public:
     /**
     * \brief Копирующий конструктор.
     */
-    List(const List& other) = delete;
+    List(const List& other) noexcept;
 
     /**
     * \brief Перемещающий конструктор.
     */
-    List(List&& other) = delete;
+    List(List&& other) noexcept;
 
     /**
     * \brief Оператор перемещения
     */
-    List&& operator = (List& other) = delete;
+    List& operator = (List&& other) noexcept;
 
     /**
     * \brief Оператор копирования
     */
-    List& operator = (const List& other) = delete;
+    List& operator = (const List& other) noexcept;
 };

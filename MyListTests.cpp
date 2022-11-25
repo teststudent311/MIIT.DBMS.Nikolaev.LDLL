@@ -10,8 +10,7 @@ namespace MyListTests
 	TEST_CLASS(MyListTests)
 	{
 	public:
-		
-		TEST_METHOD(ADD_HEAD_SUCCSESS)
+		TEST_METHOD(AddHead_ValidData_Success)
 		{
 			// Arrange
 			const int value_1 = 1;
@@ -23,12 +22,11 @@ namespace MyListTests
 			my_list.AddHead(value_2);
 			int expected = my_list.head->data;
 
-
 			// Assert
 			Assert::AreEqual(value_2, expected);
 		}
 
-		TEST_METHOD(ADD_TAIL_SUCCSESS)
+		TEST_METHOD(AddTail_ValidData_Success)
 		{
 			// Arrange
 			const int value_1 = 1;
@@ -40,28 +38,11 @@ namespace MyListTests
 			my_list.AddTail(value_2);
 			int expected = my_list.tail->data;
 
-
 			// Assert
 			Assert::AreEqual(value_2, expected);
 		}
 
-		TEST_METHOD(GetCount_SUCCSESS)
-		{
-			// Arrange
-			const int value = 1;
-
-			// Act
-			List my_list;
-			my_list.AddHead(value);
-			my_list.AddHead(value);
-			size_t expected = 2;
-
-
-			// Assert
-			Assert::AreEqual(my_list.GetCount(), expected);
-		}
-
-		TEST_METHOD(Contains_ValidData_SUCCSESS)
+		TEST_METHOD(Contains_ValidData_Success)
 		{
 			// Arrange
 			const int value_1 = 1;
@@ -71,13 +52,12 @@ namespace MyListTests
 			List my_list;
 			my_list.AddHead(value_1);
 
-
 			// Assert
 			Assert::IsTrue(my_list.Contains(value_1));
 			Assert::IsFalse(my_list.Contains(value_2));
 		}
 
-		TEST_METHOD(PrintAll_SUCCSESS)
+		TEST_METHOD(ToString_Success)
 		{
 			// Arrange
 			const int value_1 = 1;
@@ -87,15 +67,14 @@ namespace MyListTests
 			List my_list;
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
-			string expected = "2, 1, ";
-			string real = my_list.PrintAll();
-
+			string expected = "2, 1";
+			string real = my_list.ToString();
 
 			// Assert
 			Assert::AreEqual(expected, real);
 		}
 
-		TEST_METHOD(Insert_SUCCSESS)
+		TEST_METHOD(Insert_ValidData_Success)
 		{
 			// Arrange
 			const int value_1 = 1;
@@ -110,24 +89,37 @@ namespace MyListTests
 			my_list.Insert(valueToInsert, indexToInsert);
 			int expected = my_list.head->data;
 			
-
 			// Assert
 			Assert::AreEqual(expected, valueToInsert);
 		}
 
-		TEST_METHOD(Delete_ValidData_SUCCSESS)
+		TEST_METHOD(Insert_InvalidData_Failure)
 		{
 			// Arrange
 			const int value_1 = 1;
 			const int value_2 = 2;
-			const size_t indexToDelete = 1;
+			const int valueToInsert = 10;
+			const size_t indexToInsert = 99;
+			List my_list;
+			my_list.AddHead(value_1);
+			my_list.AddHead(value_2);
+
+			// Act & Assert
+			Assert::ExpectException<std::out_of_range>([&]() { my_list.Insert(valueToInsert, indexToInsert); });
+		}
+
+		TEST_METHOD(Delete_ValidData_Success)
+		{
+			// Arrange
+			const int value_1 = 1;
+			const int value_2 = 2;
+			const size_t indexToDelete = 0;
 
 			// Act
 			List my_list;
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
 			my_list.Delete(indexToDelete);
-
 
 			// Assert
 			Assert::AreEqual(value_1, my_list.head->data);
@@ -142,7 +134,6 @@ namespace MyListTests
 			List my_list;
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
-
 
 			// Act & Assert
 			Assert::ExpectException<std::out_of_range>([&]() { my_list.Delete(indexToDelete); });
@@ -173,15 +164,45 @@ namespace MyListTests
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
 			int expected = my_list.head->data;
-			Element* expectedPointer = nullptr;
+			size_t expectedSize = 0;
 
 			// Act
 			List new_list = move(my_list);
 
 			// Act & Assert
 			Assert::AreEqual(expected, new_list.head->data);
-			//Assert::AreEqual(my_list.head, expectedPointer);
+			Assert::AreEqual(my_list.count, expectedSize);
 		}
 
+		TEST_METHOD(Remove_ValidData_Success)
+		{
+			// Arrange
+			const int value_1 = 1;
+			const int value_2 = 2;
+			const int valueToDelete = 2;
+			List my_list;
+			my_list.AddHead(value_1);
+			my_list.AddHead(value_2);
+
+			// Act
+			my_list.Remove(valueToDelete);
+
+			// Assert
+			Assert::AreEqual(my_list.head->data, value_1);
+		}
+
+		TEST_METHOD(Remove_InvalidData_Failure)
+		{
+			// Arrange
+			const int value_1 = 1;
+			const int value_2 = 2;
+			const int valueToDelete = 10;
+			List my_list;
+			my_list.AddHead(value_1);
+			my_list.AddHead(value_2);
+
+			// Act & Assert
+			Assert::ExpectException<std::out_of_range>([&]() { my_list.Delete(valueToDelete); });
+		}
 	};
 }

@@ -12,26 +12,31 @@ List::List() noexcept : head(nullptr), tail(nullptr), count(0)
 
 List::~List()
 {
-    this->Clear();
+    while (this->count != 0)
+    {
+        Delete(0);
+    }
 }
 
 void List::AddHead(const int value) noexcept
 {
     Element* temp = new Element(value);
-
     temp->prev = nullptr;
     temp->next = this->head;
 
     if (this->head != nullptr)
+    {
         this->head->prev = temp;
-
+    }
     if (this->count == 0)
     {
         this->tail = temp;
         this->head = temp;
     }
     else
+    {
         this->head = temp;
+    }
 
     this->count++;
 }
@@ -43,78 +48,70 @@ void List::AddTail(const int value) noexcept
     temp->prev = this->tail;
 
     if (this->tail != nullptr)
+    {
         this->tail->next = temp;
-
-    // Если элемент первый, то он одновременно и голова, и хвост списка
+    }
     if (this->count == 0)
     {
         this->tail = temp;
         this->head = temp;
     }
     else
+    {
         this->tail = temp;
+    }
 
     this->count++;
 }
 
-void List::Insert(const int value, const size_t pos)
+void List::Insert(const int value, const size_t position)
 {   
-    if (pos > this->count + 1)
+    if (position > this->count)
     {
         throw out_of_range("Bad position!");
     }
-
-    if (pos == this->count + 1)
+    if (position == 0)
     {
-        AddTail(value);
+        this->AddHead(value);
         return;
     }
-    else if (pos == 0)
+    if (position == this->count)
     {
-        AddHead(value);
+        this->AddTail(value);
         return;
     }
 
-    size_t i = 1;
-
-    // Отсчитываем от головы n - 1 элементов
-    Element* ins = this->head;
-
-    while (i < pos)
+    Element* prevInsert = this->head;
+    for (size_t index = 0; index < position - 1; index++)
     {
-        ins = ins->next;
-        i++;
+        prevInsert = prevInsert->next;
     }
 
-    Element* prevIns = ins->prev;
-    Element* temp = new Element(value);
-
-    if (prevIns != nullptr && this->count != 1)
-        prevIns->next = temp;
-
-    temp->next = ins;
-    temp->prev = prevIns;
-    ins->prev = temp;
+    Element* elementToInsert = new Element(value);
+    Element* nextInsert = prevInsert->next;
+    prevInsert->next = elementToInsert;
+    elementToInsert->prev = prevInsert; 
+    elementToInsert->next = nextInsert;
 
     this->count++;
 }
 
 
-string List::PrintAll() const noexcept
+string List::ToString() const noexcept
 {
     ostringstream tmpStream;
-    // Если в списке есть элементы, то печатаем с головного элемента списка
-    if (this->count != 0)
-    {
-        Element* temp = this->head;
-        for (size_t index = 0; index < count; index++)
-        {
-            tmpStream << temp->data << ", ";
-            temp = temp->next;
-        }
 
-        return tmpStream.str();
+    Element* temp = this->head;
+    for (size_t index = 0; index < this->count; index++)
+    {
+        tmpStream << temp->data;
+        if (index != this->count - 1)
+        {
+            tmpStream << ", ";
+        }
+        temp = temp->next;
     }
+    return tmpStream.str();
 }
 
 void List::Remove(const int value)
@@ -127,16 +124,14 @@ void List::Remove(const int value)
     Element* tmp = this->head;
     int index = -1;
 
-    for (size_t i = 0; i < count - 1; i++)
+    for (size_t i = 0; i < this->count; i++)
     {
         if (tmp->data == value)
+        {
             index = i;
+        }
+        tmp = tmp->next;
         
-    }
-
-    if (index <= -1)
-    {
-        throw out_of_range("Didn`t find values!");
     }
 
     static_cast<size_t>(index);
@@ -144,68 +139,60 @@ void List::Remove(const int value)
     
 }
 
-void List::Delete(const size_t pos)
+void List::Delete(const size_t position)
 {
-    if (pos > this->count)
+    if (position > this->count - 1)
     {
-        throw out_of_range("Bad position!");
+        throw out_of_range("Выход за пределы массива");
     }
 
-    size_t i = 1;
-
-    Element* del = this->head;
-
-    while (i < pos)
+    Element* tmp = this->head;
+    for (size_t index = 0; index < position; index++)
     {
-       del =del->next;
-        i++;
+        tmp = tmp->next;
     }
 
-    Element* prevDel =del->prev;
-    Element* afterDel =del->next;
-
-    // Если удаляем не голову списка
-    if (prevDel != nullptr && this->count != 1)
-        prevDel->next = afterDel;
-    // Если удаляем не хвост списка
-    if (afterDel != nullptr && this->count != 1)
-        afterDel->prev = prevDel;
-
-    // Удаляются крайние элементы
-    if (pos == 1)
-        this->head = afterDel;
-    if (pos == this->count)
-        this->tail = prevDel;
-
-    delete del;
-
+    if (this->count == 1)
+    {
+        this->head = nullptr;
+        this->tail = nullptr;
+    }
+    else
+    {
+        Element* prevDelete = tmp->prev;
+        Element* nextDelete = tmp->next;
+        if (prevDelete != nullptr)
+        {
+            prevDelete->next = nextDelete;
+        }
+        if (nextDelete != nullptr)
+        {
+            nextDelete->prev = prevDelete;
+        }
+        if (tmp == this->head)
+        {
+            this->head = nextDelete;
+        }
+        if (tmp == this->tail)
+        {
+            this->tail = prevDelete;
+        }
+    }
     this->count--;
-}
-
-
-void List::Clear() noexcept
-{
-    while (this->count != 0)
-        Delete(1);
-}
-
-size_t List::GetCount() const noexcept
-{
-    return this->count;
 }
 
 bool List::Contains(const int value) const noexcept
 {
     Element* tmp = this->head;
 
-    for (size_t i = 0; i < count; i++)
+    for (size_t i = 0; i < this->count; i++)
     {
         if (tmp->data == value)
+        {
             return true;
+        }
         tmp = tmp->next;
-
     }
-
     return false;
 }
 
@@ -219,15 +206,16 @@ List::List(List&& other) noexcept
 {
     this->head = other.head;
     this->tail = other.tail;
-
-    other.head = nullptr;
-    other.tail = nullptr;
+    
+    other.~List();
 }
 
 List& List::operator = (List&& other) noexcept
 {
     if (this == &other)
+    {
         return *this;
+    }
 
     this->~List();
 
@@ -243,7 +231,9 @@ List& List::operator = (List&& other) noexcept
 List& List::operator = (const List& other) noexcept
 {
     if (this == &other)
+    {
         return *this;
+    }
 
     Element* temp = other.head;
 
@@ -255,4 +245,3 @@ List& List::operator = (const List& other) noexcept
 
     return *this;
 }
-

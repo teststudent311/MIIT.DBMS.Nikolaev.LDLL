@@ -18,7 +18,6 @@ using namespace std;
 class List
 {
  public:
-
      // Указатели на начало и конец списка
      Element* head;
      Element* tail;
@@ -36,22 +35,11 @@ class List
     ~List() noexcept;
 
     /**
-     * \brief Функция для подсчета элементов списка
-     * \return int - количество элементов списка 
-     */
-    size_t GetCount() const noexcept;
-
-    /**
      * \brief Проверяет есть такой элемент в списке
      * \param value - значение элемента
      * \return true - если есть такой элемент, иначе - false
      */
     bool Contains(const int value) const noexcept;
-
-    /**
-     * \brief Функция очистки списка
-     */
-    void Clear() noexcept;
 
     /**
      * \brief Функция для удаления элемента списка по индексу
@@ -87,7 +75,7 @@ class List
      * \brief Функция сохранения в строку списка
      * \return строка содержащая список
      */
-    string PrintAll() const noexcept;
+    string ToString() const noexcept;
 
     /**
     * \brief Копирующий конструктор.

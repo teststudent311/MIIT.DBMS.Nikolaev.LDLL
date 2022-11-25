@@ -9,17 +9,11 @@
 #include "Element.h"  
 
 Element::Element(const int data_) noexcept : data(data_), next(nullptr), prev(nullptr)
-{
-}
+{}
 
 Element::~Element() noexcept
 {
 	this->data = 0;
 	this->next = nullptr;
 	this->prev = nullptr;
-}
-
-int Element::GetData() const noexcept
-{
-	return this->data;
 }

@@ -12,12 +12,12 @@
 
 using namespace std;
  
-
 class Element
 {
 public:
-
+    // Значение элемента
     int data;
+    // Указатели на начало и конец списка
     Element* next;
     Element* prev;
 
@@ -30,11 +30,6 @@ public:
      * \brief Деструктор класса
       */
     ~Element() noexcept;
-    
-    /**
-     * \brief вывод хранящегося значения
-     */
-    int GetData() const noexcept;
 };
 
 

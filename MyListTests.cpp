@@ -88,7 +88,7 @@ namespace MyListTests
 			my_list.AddHead(value_2);
 			my_list.Insert(valueToInsert, indexToInsert);
 			int expected = my_list.head->data;
-			
+
 			// Assert
 			Assert::AreEqual(expected, valueToInsert);
 		}
@@ -100,11 +100,13 @@ namespace MyListTests
 			const int value_2 = 2;
 			const int valueToInsert = 10;
 			const size_t indexToInsert = 99;
+
+			// Act 
 			List my_list;
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
 
-			// Act & Assert
+			// Assert
 			Assert::ExpectException<std::out_of_range>([&]() { my_list.Insert(valueToInsert, indexToInsert); });
 		}
 
@@ -131,11 +133,13 @@ namespace MyListTests
 			const int value_1 = 1;
 			const int value_2 = 2;
 			const size_t indexToDelete = 30;
+			
+			// Act
 			List my_list;
 			my_list.AddHead(value_1);
 			my_list.AddHead(value_2);
 
-			// Act & Assert
+			// Assert
 			Assert::ExpectException<std::out_of_range>([&]() { my_list.Delete(indexToDelete); });
 		}
 
@@ -169,7 +173,7 @@ namespace MyListTests
 			// Act
 			List new_list = move(my_list);
 
-			// Act & Assert
+			// Assert
 			Assert::AreEqual(expected, new_list.head->data);
 			Assert::AreEqual(my_list.count, expectedSize);
 		}

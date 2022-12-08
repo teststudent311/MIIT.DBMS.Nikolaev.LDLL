@@ -96,7 +96,6 @@ void List::Insert(const int value, const size_t position)
     this->count++;
 }
 
-
 string List::ToString() const noexcept
 {
     ostringstream tmpStream;
@@ -136,13 +135,12 @@ void List::Remove(const int value)
 
     static_cast<size_t>(index);
     Delete(index);
-    
 }
 
 void List::Delete(const size_t position)
 {
     if (position > this->count - 1)
-    {
+    {   
         throw out_of_range("Выход за пределы массива");
     }
 
@@ -154,8 +152,8 @@ void List::Delete(const size_t position)
 
     if (this->count == 1)
     {
+        delete tmp;
         this->head = nullptr;
-        this->tail = nullptr;
     }
     else
     {
@@ -177,6 +175,8 @@ void List::Delete(const size_t position)
         {
             this->tail = prevDelete;
         }
+        delete tmp;
+        tmp = nullptr;
     }
     this->count--;
 }
@@ -198,16 +198,29 @@ bool List::Contains(const int value) const noexcept
 
 List::List(const List& other) noexcept
 {
-    this->head = other.head;
-    this->tail = other.tail;
+    Element* tmp = other.head;
+    for (size_t index = 0; index < other.count; index++)
+    {
+        this->AddTail(tmp->data);
+        tmp = tmp->next;
+    }
+    delete tmp;
 }
 
 List::List(List&& other) noexcept
 {
-    this->head = other.head;
-    this->tail = other.tail;
-    
-    other.~List();
+    Element* tmp = other.head;
+    for (size_t index = 0; index < other.count; index++)
+    {
+        this->AddTail(tmp->data);
+        tmp = tmp->next;
+    }
+    delete tmp;
+
+    while (other.count != 0)
+    {
+        other.Delete(0);
+    }
 }
 
 List& List::operator = (List&& other) noexcept
@@ -217,13 +230,23 @@ List& List::operator = (List&& other) noexcept
         return *this;
     }
 
-    this->~List();
+    while (this->count != 0)
+    {
+        this->Delete(0);
+    }
 
-    this->head = other.head;
-    this->tail = other.tail;
+    Element* tmp = other.head;
+    for (size_t index = 0; index < other.count; index++)
+    {
+        this->AddTail(tmp->data);
+        tmp = tmp->next;
+    }
+    delete tmp;
 
-    other.head = nullptr;
-    other.tail = nullptr;
+    while (other.count != 0)
+    {
+        other.Delete(0);
+    }
 
     return *this;
 }

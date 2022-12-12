@@ -153,6 +153,7 @@ void List::Delete(const size_t position)
     if (this->count == 1)
     {
         delete tmp;
+        tmp = nullptr;
         this->head = nullptr;
     }
     else
@@ -205,6 +206,7 @@ List::List(const List& other) noexcept
         tmp = tmp->next;
     }
     delete tmp;
+    tmp = nullptr;
 }
 
 List::List(List&& other) noexcept
@@ -216,6 +218,7 @@ List::List(List&& other) noexcept
         tmp = tmp->next;
     }
     delete tmp;
+    tmp = nullptr;
 
     while (other.count != 0)
     {
@@ -242,6 +245,7 @@ List& List::operator = (List&& other) noexcept
         tmp = tmp->next;
     }
     delete tmp;
+    tmp = nullptr;
 
     while (other.count != 0)
     {
